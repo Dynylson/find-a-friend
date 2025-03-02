@@ -46,11 +46,11 @@ model Pet {
   weight        Float
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  addressId     String?
-  orgId     String?
+  address_id     String?
+  org_id     String?
 
-  address       Address? @relation(fields: [addressId], references: [id])
-  org           Org?     @relation(fields: [orgId], references: [id])
+  address       Address? @relation(fields: [address_id], references: [id])
+  org           Org?     @relation(fields: [org_id], references: [id])
 
   @@map("pets")
 }
@@ -78,11 +78,11 @@ model Org {
   phone       String?
   created_at  DateTime  @default(now())
   updated_at  DateTime @updatedAt
-  userId      String
-  addressId   String?
+  user_id      String
+  address_id   String?
 
-  user        User     @relation(fields: [userId], references: [id])
-  address     Address? @relation(fields: [addressId], references: [id])
+  user        User     @relation(fields: [user_id], references: [id])
+  address     Address? @relation(fields: [address_id], references: [id])
   pets        Pet[]
 
   @@map("orgs")
