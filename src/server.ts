@@ -1,16 +1,9 @@
-import Fastify from 'fastify'
 import { env } from './env'
+import { app } from './app'
 
-const fastify = Fastify({ logger: true })
-
-fastify.get('/', async () => {
-  return { message: 'Server is running! 🚀' }
-})
-
-fastify.listen({ port: env.PORT }, (err) => {
-  if (err) {
-    console.error(err)
-    process.exit(1)
-  }
-  console.log(`Server is running! 🚀`)
-})
+app
+  .listen({
+    host: '0.0.0.0',
+    port: env.PORT,
+  })
+  .then(() => console.log('HTTP Server Runnig! 🤓'))
