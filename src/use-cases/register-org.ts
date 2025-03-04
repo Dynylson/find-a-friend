@@ -1,6 +1,7 @@
 import { Org } from '@prisma/client'
 import { OrgRepository } from '../repositories/org-repository'
 import { hash } from 'bcryptjs'
+import { UserRepository } from '../repositories/user-repository'
 
 interface RegisterOrgUseCaseRequest {
   name: string
@@ -14,7 +15,10 @@ interface RegisterOrgUseCaseResponse {
 }
 
 export class RegisterOrgUseCase {
-  constructor(private orgRepository: OrgRepository) {}
+  constructor(
+    private orgRepository: OrgRepository,
+    private userRepository: UserRepository,
+  ) {}
 
   async execute({
     name,
@@ -22,6 +26,12 @@ export class RegisterOrgUseCase {
     password,
     phone,
   }: RegisterOrgUseCaseRequest): Promise<RegisterOrgUseCaseResponse> {
+    const emailAlreadyUsed = await this.userRepository.findByEmail(email)
+
+    if (emailAlreadyUsed) {
+      throw new Error('E-mail already in use.') // TODO: configure global error handler
+    }
+
     const hashedPassword = await hash(password, 10)
 
     const org = await this.orgRepository.register({
