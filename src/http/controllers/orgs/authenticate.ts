@@ -17,5 +17,14 @@ export async function authenticate(
 
   const { org } = await authenticateOrgUseCase.execute(orgPayload)
 
-  return reply.status(201).send(org)
+  const token = await reply.jwtSign(
+    {
+      userId: org.user_id,
+    },
+    {
+      expiresIn: '1h',
+    },
+  )
+
+  return reply.status(200).send({ token })
 }
