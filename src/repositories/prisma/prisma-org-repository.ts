@@ -3,6 +3,16 @@ import { OrgRepository } from '../org-repository'
 import prisma from '../../lib/prisma'
 
 export class PrismaOrgRepository implements OrgRepository {
+  async findByUserId(id: string): Promise<Org | null> {
+    const org = await prisma.org.findFirst({
+      where: {
+        user_id: id,
+      },
+    })
+
+    return org
+  }
+
   async register(
     data: Prisma.UserCreateInput & Pick<Prisma.OrgCreateInput, 'phone'>,
   ): Promise<Org> {
